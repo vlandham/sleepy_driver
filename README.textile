@@ -29,12 +29,12 @@ h2. Example commands
 
 h3. Example command to split up video into images:
 
-  mPlayer -vo jpeg:quality=100:outdir=./images/ ./kaiduan.mpg
+  @mPlayer -vo jpeg:quality=100:outdir=./images/ ./kaiduan.mpg@
 	
 h3. Example command to rejoin all images back to a video:
 
-	ffmpeg -r 3 -i result-%01d.jpg test18002.mp4
+	@ffmpeg -r 3 -i result-%01d.jpg test18002.mp4@
 	
 h3. Example command to rejoin all images -- works if the file names are not sequential
 
-	mencoder "mf://*.jpg" -mf fps=5 -o test.avi -ovc lavc -lavcopts vcodec=msmpeg4v2:vbitrate=800
+  @mencoder "mf://*.jpg" -mf fps=5 -o test.avi -ovc lavc -lavcopts vcodec=msmpeg4v2:vbitrate=800@
