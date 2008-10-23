@@ -1,3 +1,8 @@
+# !!!!!!!!!!!!!
+# Not Useful anymore
+#   This functionality is already contained in the actual application
+# !!!!!!!!!!!!!
+
 require 'rubygems'
 require 'RMagick'
 require 'yaml'

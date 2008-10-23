@@ -7,6 +7,7 @@ h2. Requirements
 * "Shoes":http://shoooes.net/
 * mPlayer to extract images from video
 * ffmpeg or mencoder or both to create a video out of the images
+* rmagick - used for all the image processing
 
 h2. Normal workflow
 
