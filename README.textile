@@ -1,0 +1,36 @@
+h1. Sleepy Driver Finder 
+
+Quick (in thought - not necessarily in process) hack to find out if a driver is sleepy or not.
+
+h2. Requirements
+
+* "Shoes":http://shoooes.net/
+* mPlayer to extract images from video
+* ffmpeg or mencoder or both to create a video out of the images
+
+h2. Normal workflow
+
+* Split up video into a series of images.
+** See the example command below
+* Delete extra frames if necessary 
+** Use the image_del script in the scripts folder
+* Pick out the eyes in the images and save them to yaml
+** Use the eye_spy script
+** This this a shoes app.
+* Make sure the paths in sleepy_driver_finder.rb are correct
+** Most assume that everything is stored in the ./data directory
+* Run the sleepy driver finder
+** @ruby ./sleepy_driver_finder.rb@
+* Stitch resulting images back together
+** See example command below
+
+h2. Example commands
+
+Example command to split up video into images:
+  mPlayer -vo jpeg:quality=100:outdir=./images/ ./kaiduan.mpg
+	
+Example command to rejoin all images back to a video:
+	ffmpeg -r 3 -i result-%01d.jpg test18002.mp4
+	
+Example command to rejoin all images -- works if the file names are not sequential
+	mencoder "mf://*.jpg" -mf fps=5 -o test.avi -ovc lavc -lavcopts vcodec=msmpeg4v2:vbitrate=800
