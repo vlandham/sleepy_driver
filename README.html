@@ -1,0 +1,112 @@
+<h1>Sleepy Driver Finder</h1>
+
+
+	<p>Quick hack to find out if a driver is sleepy or not.</p>
+
+
+	<p>Software contained within has only been tested on the Mac <span class="caps">OS X</span> operating system. Theoretically, it could work on Linux and other <span class="caps">UNIX</span> based systems.</p>
+
+
+	<p>All scripts and software for this system are written in Ruby.</p>
+
+
+	<h2>Contents</h2>
+
+
+	<p>There are a few scripts that are useful in the ./scripts folder. The application that actually performs the sleepy eye detection is in the base directory and the ./lib folder.</p>
+
+
+	<ul>
+	<li>./scripts
+	<ul>
+	<li>eye_spy.rb &#8211; <span class="caps">GUI</span> for locating the eyes in a set of images to be used as input to the application.  For each image of the video sequence, the pupils of the individuals eyes are marked using this program.  These locations are stored in the yaml file : ./data/eyes_raw.</li>
+		<li>image_del.rb &#8211; removes images from the broken down video sequence.  For the first video clip, this removed duplications, for the second, it just makes it so the algorithm doesn&#8217;t look at all the frames in the sequence.</li>
+		<li>yaml_fixer.rb &#8211; no longer useful.</li>
+		<li>eye_cutter.rb &#8211; no longer useful.</li>
+	</ul></li>
+	</ul>
+
+
+	<ul>
+	<li><code>sleepy_driver_finder.rb</code> &#8211; Main application that takes the sequence of images and the yaml file locating the eye positions, determines if the individual is asleep, and then outputs this decision to a modified version of the image.  This application would be called using: <code>ruby sleepy_driver_finder.rb</code></li>
+	</ul>
+
+
+	<ul>
+	<li>./lib &#8211; classes used by the sleepy driver finder application
+	<ul>
+	<li>eye_grabber.rb &#8211; For each image, the yaml eye file is queried to determine the locations of the eyes, and then these eyes are extracted.</li>
+		<li>eye_diagnoser.rb &#8211; for an eye image, determines if it is open or closed. Uses the moment of the eye after normalization and thresholding. </li>
+		<li>eye_drawer.rb &#8211; adds the icon to the output images indicating if the person is awake or asleep.</li>
+	</ul></li>
+	</ul>
+
+
+	<h2>Requirements</h2>
+
+
+	<ul>
+	<li>Ruby v1.8.6 tested</li>
+		<li><a href="http://shoooes.net/">Shoes</a> &#8211; used for the <span class="caps">GUI</span> for locating eyes in scripts/eye_spy.rb</li>
+		<li>mPlayer to extract images from video</li>
+		<li>ffmpeg or mencoder or both to create a video out of the images</li>
+		<li>rmagick &#8211; used for all the image processing</li>
+	</ul>
+
+
+	<h2>Normal workflow</h2>
+
+
+	<ul>
+	<li>Split up video into a series of images.
+	<ul>
+	<li>See the example command below</li>
+	</ul>
+	</li>
+		<li>Delete extra frames if necessary 
+	<ul>
+	<li>Use the image_del script in the scripts folder</li>
+	</ul>
+	</li>
+		<li>Pick out the eyes in the images and save them to yaml
+	<ul>
+	<li>Use the eye_spy script</li>
+		<li>This this a shoes app.</li>
+	</ul>
+	</li>
+		<li>Make sure the paths in sleepy_driver_finder.rb are correct
+	<ul>
+	<li>Most assume that everything is stored in the ./data directory</li>
+	</ul>
+	</li>
+		<li>Run the sleepy driver finder
+	<ul>
+	<li><code>ruby ./sleepy_driver_finder.rb</code></li>
+	</ul>
+	</li>
+		<li>Stitch resulting images back together
+	<ul>
+	<li>See example command below</li>
+	</ul></li>
+	</ul>
+
+
+	<h2>Example commands</h2>
+
+
+	<h3>Example command to split up video into images:</h3>
+
+
+	<pre><code><code>mPlayer -vo jpeg:quality=100:outdir=./images/ ./kaiduan.mpg</code></code></pre>
+
+
+	<h3>Example command to rejoin all images back to a video:</h3>
+
+
+	<pre><code><code>ffmpeg -r 3 -i result-%01d.jpg test18002.mp4</code></code></pre>
+
+
+	<h3>Example command to rejoin all images&#8212;works if the file names are not sequential</h3>
+
+
+	<pre><code><code>mencoder "mf://*.jpg" -mf fps=5 -o test.avi -ovc lavc -lavcopts vcodec=msmpeg4v2:vbitrate=800</code></code></pre>

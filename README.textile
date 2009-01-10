@@ -1,10 +1,32 @@
 h1. Sleepy Driver Finder 
 
-Quick (in thought - not necessarily in process) hack to find out if a driver is sleepy or not.
+Quick hack to find out if a driver is sleepy or not.
+
+Software contained within has only been tested on the Mac OS X operating system. Theoretically, it could work on Linux and other UNIX based systems.
+
+All scripts and software for this system are written in Ruby.
+
+h2. Contents
+
+There are a few scripts that are useful in the ./scripts folder. The application that actually performs the sleepy eye detection is in the base directory and the ./lib folder.
+
+* ./scripts
+** eye_spy.rb - GUI for locating the eyes in a set of images to be used as input to the application.  For each image of the video sequence, the pupils of the individuals eyes are marked using this program.  These locations are stored in the yaml file : ./data/eyes_raw.
+** image_del.rb - removes images from the broken down video sequence.  For the first video clip, this removed duplications, for the second, it just makes it so the algorithm doesn't look at all the frames in the sequence.
+** yaml_fixer.rb - no longer useful.
+** eye_cutter.rb - no longer useful.
+
+* @sleepy_driver_finder.rb@ - Main application that takes the sequence of images and the yaml file locating the eye positions, determines if the individual is asleep, and then outputs this decision to a modified version of the image.  This application would be called using: @ruby sleepy_driver_finder.rb@ 
+
+* ./lib - classes used by the sleepy driver finder application
+** eye_grabber.rb - For each image, the yaml eye file is queried to determine the locations of the eyes, and then these eyes are extracted.
+** eye_diagnoser.rb - for an eye image, determines if it is open or closed. Uses the moment of the eye after normalization and thresholding. 
+** eye_drawer.rb - adds the icon to the output images indicating if the person is awake or asleep.
 
 h2. Requirements
 
-* "Shoes":http://shoooes.net/
+* Ruby v1.8.6 tested
+* "Shoes":http://shoooes.net/ - used for the GUI for locating eyes in scripts/eye_spy.rb
 * mPlayer to extract images from video
 * ffmpeg or mencoder or both to create a video out of the images
 * rmagick - used for all the image processing
